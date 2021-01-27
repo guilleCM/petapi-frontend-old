@@ -1,0 +1,10 @@
+
+@media (max-width: 769px) {
+    .dogsForm {
+        border-color: #ddd;
+        display: block;
+    }
+}
+.dogsForm > div {
+    padding-top: 20px;
+}
