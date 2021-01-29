@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import PageLayout from '../components/layout';
 import { Badge, Card, Col, Row, List, Typography, Descriptions, Form, Button, Select } from 'antd';
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import React, { useState } from 'react';
 import styles from "./perros.module.css";
@@ -65,12 +66,12 @@ export default function Perros(props) {
     const unique_races_parent = [...new Set(props.sourceData.map(item => item.race_parent))]
     const unique_races = [...new Set([...unique_races_mother, ...unique_races_parent])]
     const [filteredData, setFilteredData] = useState(undefined);
+    const [expand, setExpand] = useState(true);
     const [form] = Form.useForm();
     const onApplyFilter = (values) => {
         let filteredData = JSON.parse(JSON.stringify(props.sourceData));
         for (let filterProp of Object.keys(values)) {
             if (values[filterProp] !== "0") {
-                console.log(filterProp)
                 switch(filterProp) {
                     case "race":
                         filteredData = filteredData.filter(dog => 
@@ -88,6 +89,7 @@ export default function Perros(props) {
             }
         }
         setFilteredData(filteredData);
+        setExpand(true);
     };
     const onReset = () => {
         form.resetFields();
@@ -105,7 +107,7 @@ export default function Perros(props) {
             </Head>
             <div className="site-card-wrapper">
                 <Row style={{position: 'sticky', top: 0, zIndex: 1, background: '#f0f2f5', borderBottom: '1px solid #b4b4b4'}}>
-                    <Col span={24} style={{padding: 20}}>
+                    <Col span={24} style={{padding: 20}} className={expand ? styles.dogsFormHidden : styles.dogsFormShow}>
                         <Text strong>Filtrar por:</Text>
                         <Form
                             layout="inline"
@@ -151,14 +153,25 @@ export default function Perros(props) {
                                     )}
                                 </Select>
                             </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">Aplicar filtros</Button>
-                            </Form.Item>
-                            <Form.Item>
+
+                            <Col span={24}>
+                                <Button className={styles.dogsFormBtn} type="primary" htmlType="submit">Aplicar filtros</Button>
                                 <Button htmlType="button" onClick={onReset}>Borrar filtros</Button>
-                            </Form.Item>
+                            </Col>
                         </Form>
                     </Col>
+                    <div className={styles.collapseFiltersContainer}>
+                        <Button 
+                            type="link"
+                            className={styles.collapseFilters}
+                            onClick={() => {
+                                setExpand(!expand);
+                            }}
+                        >
+                            {expand ? <DownOutlined /> : <UpOutlined />}
+                            {expand ? <span>Mostrar filtros</span> : <span>Ocultar filtros</span>}
+                        </Button>
+                    </div>
                 </Row>
                 <List
                     grid={{
@@ -175,17 +188,33 @@ export default function Perros(props) {
                     dataSource={filteredData || props.sourceData}
                     renderItem={dog => (
                         <List.Item>
+                            <Badge.Ribbon
+                                className={styles.adoptRibbon}
+                                text={
+                                    <Button type="primary" value="small">
+                                        Adoptar
+                                    </Button>
+                                }
+                            >
                             <Card
-                                hoverable
+                                // hoverable
                                 key={dog.id}
                                 cover={
-                                    <img 
-                                        alt={dog.id} 
-                                        src={`http://127.0.0.1:5000/${dog.media[0]}`} 
-                                        style={{maxHeight: 400, width: 'auto', maxWidth: '100%', margin: 'auto'}} 
-                                    />
+                                    <>
+                                        <img 
+                                            alt={dog.id} 
+                                            src={`http://127.0.0.1:5000/${dog.media[0]}`} 
+                                            className={styles.dogCardCover}
+                                        />
+                                        <img 
+                                            alt={dog.id+' background'} 
+                                            src={`http://127.0.0.1:5000/${dog.media[0].replace("static/", "static/thumb-")}`} 
+                                            className={styles.dogCardCoverBg}
+                                        />
+                                    </>
                                 }
                                 size="small"
+                                className={styles.dogCardCoverContainer}
                             >
                                 <Descriptions
                                     style={{textTransform: "capitalize"}}
@@ -213,6 +242,7 @@ export default function Perros(props) {
                                     <Descriptions.Item label="Lugar">{dog.channel}</Descriptions.Item>
                                 </Descriptions>
                             </Card>
+                            </Badge.Ribbon>
                         </List.Item>
                     )}
                 />
