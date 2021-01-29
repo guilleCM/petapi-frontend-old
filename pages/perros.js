@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import Link from 'next/link';
+// import Link from 'next/link';
 import PageLayout from '../components/layout';
-import { Badge, Card, Col, Row, List, Typography, Descriptions, Form, Button, Select } from 'antd';
+import { Badge, Card, Col, Row, List, Typography, Descriptions, Form, Button, Select, Modal } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -12,11 +12,12 @@ const { Text } = Typography;
 
 const { Option } = Select;
 
-// import {
-//     ManOutlined,
-//     WomanOutlined,
-//     QuestionOutlined,
-// } from '@ant-design/icons';
+import {
+    PhoneFilled,
+    MailFilled,
+    EnvironmentFilled,
+} from '@ant-design/icons';
+
 const sex = {
     0: "Desconocido",
     1: "Macho",
@@ -60,6 +61,36 @@ const filterFormInitialValues = {
     sex: "0",
     coat_type: "0",
 } 
+
+function infoCEPAD() {
+    Modal.info({
+      title: 'Adoptar en CEPAD',
+      content: (
+        <div>
+            <p><PhoneFilled /> 871 71 97 72</p>
+            <p><MailFilled /> veterinari@cepad.es</p>
+            <p><EnvironmentFilled /> Carretera Palma a Sineu, km 15.700 Camí de Son Sancho s/n 07142 Santa Eugenia</p>
+            <p>Para reservar o ir a conocer al animal se puede poner en contacto con el CEPAD (Centro de Protección de Animales Domésticos), en el teléfono 871 71 97 72, y consultar una cita.</p>
+        </div>
+      ),
+      onOk() {},
+    });
+  }
+
+function infoSonReus() {
+    Modal.info({
+      title: 'Adoptar en Son Reus',
+      content: (
+        <div>
+            <p><PhoneFilled /> 971 43 86 95</p>
+            <p><MailFilled /> centreproteccioanimal@palma.cat</p>
+            <p><EnvironmentFilled /> Camino  de Son Reus, s/n 07120 Palma (Illes Balears)</p>
+            <p>Para reservar o ir a conocer al animal se puede poner en contacto con el CSMPA (Centro Sanitario Municipal de Protección Animal) de Son Reus, en el teléfono 971 43 86 95, y consultar una cita.</p>
+        </div>
+      ),
+      onOk() {},
+    });
+  }
 
 export default function Perros(props) {
     const unique_races_mother = [...new Set(props.sourceData.map(item => item.race_mother))]
@@ -191,7 +222,7 @@ export default function Perros(props) {
                             <Badge.Ribbon
                                 className={styles.adoptRibbon}
                                 text={
-                                    <Button type="primary" value="small">
+                                    <Button onClick={dog.channel === "CEPAD" ? infoCEPAD : infoSonReus} type="primary" value="small">
                                         Adoptar
                                     </Button>
                                 }
