@@ -1,0 +1,23 @@
+.appHeader {
+    background: black;
+    height: 80px;
+}
+.logoHeader {
+    height: 100%;
+    padding: 8px;
+    float: left;
+}
+.sloganHeader {
+    height: 100%;
+    padding: 5px;
+    float: left;
+}
+.sloganImg {
+    border-left: solid #b1b1b1 1px;
+}
+.titleHeaderContainer {
+    display: inline;
+}
+.titleHeader {
+    color: white;;
+}

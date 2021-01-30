@@ -58,8 +58,8 @@
     width: 100%;
     margin: auto;
     z-index: 0;
-    filter: blur(3px);
-    -webkit-filter: blur(3px);
+    filter: brightness(0.8) blur(3px);
+    -webkit-filter: brightness(0.8) blur(3px);
 }
 .dogCardCoverContainer > div {
     overflow: hidden;
