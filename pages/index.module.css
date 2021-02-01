@@ -1,0 +1,33 @@
+.helpList {
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    margin-bottom: 48px;
+    background-color: #ffffff;
+    margin-bottom: 16px;
+}
+.listImg {
+    width: 272px;
+}
+@media (min-width: 992px) {
+    .helpList {
+        width: 50%;
+        display: inline-flex;
+        margin-bottom: 32px;
+    }
+    .listImg {
+        height: 150px;
+        width: auto;
+    }
+}
+/* @media (min-width: 1300) {
+    .listImg {
+        height: 200px;
+        width: auto;
+    }
+} */
+@media (min-width: 1300) {
+    .listImg {
+        height: 200px;
+        width: auto;
+    }
+}

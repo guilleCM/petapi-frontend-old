@@ -1,209 +1,105 @@
 import Head from 'next/head'
+import PageLayout from '../components/layout';
+import { Badge, Card, Col, Row, List, Typography, Descriptions, Form, Button, Select, Modal, Space } from 'antd';
+import styles from "./index.module.css";
+
+const { Title } = Typography;
+
+const listPoints = [
+    {
+        title: `Busca y encuentra a los peluditos en adopción`,
+        // avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        // description:
+        //   'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+        content: 'Las medidas de higiene a causa del COVID obliga a los usuarios de las perreras a reservar cita previa para conocer a los perros. Aquí podrás buscarlos y filtrarlos cómodamente por tamaño, sexo, raza, edad e incluso el tipo de pelo.',
+        img: '/undraw_pet_adoption.svg',
+    },
+    {
+        title: 'Recibe notificaciones cuando entren nuevos perros',
+        content: 'Podrás ser el primero en enterarte de la entrada de nuevos peluditos en las perreras. Recibe una notificación via email o via push directamente en tu móvil. Sé el primero en reservarlo.',
+        img: '/undraw_newsletter.svg',
+    },
+    {
+        title: 'Disfruta de una web adaptada a móvil',
+        content: 'Las webs de las perreras son my antiguas y no están preparadas para ver desde el móvil. Nuestra web está pensada para los tiempos que corren, así que se puede disfrutar desde todos los dispositivos actuales: ordenador, tablet y móvil.',
+        img: '/undraw_mobile_app.svg',
+    },
+    {
+        title: 'Mantente al día desde una única web',
+        content: 'Te mantenemos al día de las entradas de perros en diferentes perreras, para que no tengas que ir consultandolas una a una. Nosotros lo hacemos por ti. Gana tiempo.',
+        img: '/undraw_online_organizer.svg',
+    },
+]
 
 export default function Home() {
-  return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+    return (
+        <PageLayout>
+            <Head>
+                <title>Adoptar perros en Mallorca</title>
+            </Head>
+            <div className="site-card-wrapper">
+                <Row>
+                    <Col span={24} style={{ padding: 20 }}>
+                        <Title>Bienvenidos a Adoptallorca</Title>
+                        <Title level={3}>Aquí puedes buscar y encontrar los perros en adopción de las perreras de Mallorca.</Title>
+                        <img src='/good_doggy.svg' alt='bienvenidos' />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} style={{ padding: 20 }}>
+                        <Title>¿Porqué nace esta App?</Title>
+                        <p>
+                            {`
+                            Adoptar a un perro de las perreras de Mallorca es toda una odisea. 
+                            Las entradas de estos animales de compañía en los centros de protección animal son muy escasas y la demanda muy alta. 
+                            La situación actual te obliga a estar pendiente de las diversas perreras y de cuando van subiendo las nuevas entradas 
+                            a sus webs. De modo que si te despistas o no puedes estar siempre pendiente de las webs de las perreras es probable que cuando des con un ejemplar
+                            que te guste ya se te hayan adelantado en el proceso de reserva. 
+                            `}
+                        </p>
+                        <Title>¿Cómo te ayudamos?</Title>
+                        <List
+                            itemLayout="vertical"
+                            size="large"
+                            dataSource={listPoints}
+                            renderItem={item => (
+                                <List.Item
+                                    className={styles.helpList}
+                                    key={item.title}
+                                    extra={
+                                    <img
+                                        className={styles.listImg}
+                                        alt="logo"
+                                        src={item.img}
+                                    />
+                                    }
+                                >
+                                    <List.Item.Meta
+                                    // avatar={<Avatar src={item.avatar} />}
+                                        title={item.title}
+                                    />
+                                    {item.content}
+                                </List.Item>
+                            )}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} style={{ padding: 20 }}>
+                        <Title>Ultimas entradas</Title>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} style={{ padding: 20 }}>
+                        <Title>Estadisticas</Title>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} style={{ padding: 20 }}>
+                        <Title>Suscribirse</Title>
+                    </Col>
+                </Row>
+            </div>
+        </PageLayout>
+    )
 }
