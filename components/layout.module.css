@@ -30,3 +30,10 @@
 .footerDescription {
     color: white !important;
 }
+.headMenu {
+    background-color: black;
+    float: right;
+}
+.headMenu > li {
+    line-height: 80px;
+}

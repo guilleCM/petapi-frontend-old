@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import 'antd/dist/antd.css'
-import { Layout, Row, Col } from 'antd';
+import { Layout, Row, Col, Menu } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
 import styles from "./layout.module.css";
 
@@ -39,6 +39,13 @@ export default function PageLayout({ children }) {
                         <img className={styles.sloganImg} src="/slogan-logo.png" alt="adoptallorca logo"></img>
                     </div>
                 </Link>
+                <Menu className={styles.headMenu} theme="dark" mode="horizontal">
+                    <Menu.Item key="1">
+                        <Link href="/perros">
+                            Lista de perros
+                        </Link>
+                    </Menu.Item>
+                </Menu>
             </Header>
             <Content>{children}</Content>
             <Footer className={styles.footerCol}>
