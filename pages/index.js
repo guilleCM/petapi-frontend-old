@@ -1,6 +1,8 @@
 import Head from 'next/head'
+import Link from 'next/link';
+import React, { useState } from 'react';
 import PageLayout from '../components/layout';
-import { Badge, Card, Col, Row, List, Typography, Descriptions, Form, Button, Select, Modal, Space } from 'antd';
+import { Col, Row, List, Typography, Avatar, Button, Form, Input } from 'antd';
 import styles from "./index.module.css";
 
 const { Title } = Typography;
@@ -31,24 +33,30 @@ const listPoints = [
     },
 ]
 
-export default function Home() {
+export default function Home(props) {
+    const [form] = Form.useForm();
+    const [formSubscription, setFormSubscription] = useState('');
+    // const onFormLayoutChange = ({ layout }: { layout: LayoutType }) => {
+    //     setFormLayout(layout);
+    // };
     return (
         <PageLayout>
             <Head>
-                <title>Adoptar perros en Mallorca</title>
+                <title>Buscar perros en adopción en Mallorca</title>
             </Head>
             <div className="site-card-wrapper">
-                <Row>
-                    <Col span={24} style={{ padding: 20 }}>
-                        <Title>Bienvenidos a Adoptallorca</Title>
-                        <Title level={3}>Aquí puedes buscar y encontrar los perros en adopción de las perreras de Mallorca.</Title>
-                        <img src='/good_doggy.svg' alt='bienvenidos' />
+                <Row className={styles.welcomeRow}>
+                    <Col className={styles.welcomeCol} span={24}>
+                        <div className={styles.welcomeWrapper}>
+                            <h1 className={styles.welcomeTitle}>Bienvenidos a Adoptallorca</h1>
+                            <h3 className={styles.welcomeDescription}>La web para buscar y encontrar todos los perros en adopción de Mallorca.</h3>
+                        </div>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24} style={{ padding: 20 }}>
-                        <Title>¿Porqué nace esta App?</Title>
-                        <p>
+                    <Col lg={{ span: 18, offset: 3 }} className={styles.explainAppCol}>
+                        <Title className={styles.explainApp}>¿Porqué nace esta Web?</Title>
+                        <p className={styles.explainAppDescription}>
                             {`
                             Adoptar a un perro de las perreras de Mallorca es toda una odisea. 
                             Las entradas de estos animales de compañía en los centros de protección animal son muy escasas y la demanda muy alta. 
@@ -57,49 +65,114 @@ export default function Home() {
                             que te guste ya se te hayan adelantado en el proceso de reserva. 
                             `}
                         </p>
-                        <Title>¿Cómo te ayudamos?</Title>
+                    </Col>
+                </Row>
+                <Row className={styles.explainPointsRow}>
+                    <Col xs={24} sm={24} md={24} lg={{ span: 18, offset: 3 }} className={styles.explainPointsCol}>
+                        <Title className={styles.explainPointsTitle}>¿Cómo te ayudamos?</Title>
                         <List
                             itemLayout="vertical"
                             size="large"
                             dataSource={listPoints}
-                            renderItem={item => (
+                            renderItem={(item, index) => (
                                 <List.Item
                                     className={styles.helpList}
                                     key={item.title}
-                                    extra={
-                                    <img
-                                        className={styles.listImg}
-                                        alt="logo"
-                                        src={item.img}
-                                    />
-                                    }
                                 >
-                                    <List.Item.Meta
-                                    // avatar={<Avatar src={item.avatar} />}
-                                        title={item.title}
-                                    />
-                                    {item.content}
+                                    {index%2 === 0 &&
+                                        <img
+                                            className={styles.listImg}
+                                            alt="logo"
+                                            src={item.img}
+                                        />
+                                    }
+                                    {index%2 === 1 &&
+                                        <img
+                                            className={styles.listImgMobileShow}
+                                            alt="logo"
+                                            src={item.img}
+                                        />
+                                    }
+                                    <div className={styles.helpListTextWrapper}>
+                                        <Title level={4}>{item.title}</Title>
+                                        <p>{item.content}</p>
+                                    </div>
+                                    {index%2 === 1 &&
+                                        <img
+                                            className={styles.listImgMobileHidden}
+                                            alt="logo"
+                                            src={item.img}
+                                        />
+                                    }
                                 </List.Item>
                             )}
                         />
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24} style={{ padding: 20 }}>
-                        <Title>Ultimas entradas</Title>
+                    <Col xs={24} sm={24} md={24} lg={{ span: 18, offset: 3 }} className={styles.lastEntriesCol}>
+                        <Title className={styles.explainPointsTitle}>Últimos perros</Title>
+                        <Avatar.Group className={styles.lastEntriesGroup}>
+                            {props.sourceData.map(dog =>
+                                <Avatar
+                                    className={styles.avatarEntrie}
+                                    size={{ xs: 150, sm: 150, md: 150, lg: 170, xl: 180, xxl: 200 }}
+                                    key={dog.id}
+                                    src={`http://127.0.0.1:5000/${dog.media[0]}`} 
+                                />
+                            )}
+                        </Avatar.Group>
+                    </Col> 
+                    <Col xs={{ span: 18, offset: 3 }} sm={{ span: 16, offset: 4 }} md={{ span: 12, offset: 6 }} lg={{ span: 6, offset: 9 }} className={styles.goToAllDogsCol}>
+                        <Link href="/perros">
+                            <Button block type="primary" size='large'>Ver todos los perros</Button>
+                        </Link>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={24} style={{ padding: 20 }}>
-                        <Title>Estadisticas</Title>
+                <Row className={styles.subRow}>
+                    <Col span={24}>
+                        <Title className={styles.subTitle}>Suscríbete gratis</Title>
+                        <p className={styles.subDescription}>Recibe en tu email avisos cuando entren nuevos perros</p>
                     </Col>
-                </Row>
-                <Row>
-                    <Col span={24} style={{ padding: 20 }}>
-                        <Title>Suscribirse</Title>
+                    <Col xs={{ span: 24 }} md={{ span: 12, offset: 6 }} lg={{ span: 6, offset: 12 }}>
+                        <Form
+                            // {...formItemLayout
+                            layout="vertical"
+                            form={form}
+                            size="large"
+                            // initialValues={{ layout: formSubscription }}
+                            // onValuesChange={onFormLayoutChange}
+                        >
+                            <Form.Item label="Email:" className={styles.emailLabel}>
+                                <Input placeholder="" />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button block type="primary">Suscribirse</Button>
+                            </Form.Item>
+                        </Form>
                     </Col>
                 </Row>
             </div>
         </PageLayout>
     )
 }
+
+export async function getServerSideProps(context) {
+    const res = await fetch('http://127.0.0.1:5000/api/dogs?limit=5')
+    const sourceData = await res.json()
+
+    if (!sourceData) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      }
+    }
+  
+    return {
+      props: {
+        sourceData: sourceData,
+      }, // will be passed to the page component as props
+    }
+  }

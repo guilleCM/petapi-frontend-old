@@ -6,11 +6,13 @@
     height: 100%;
     padding: 8px;
     float: left;
+    cursor: pointer;
 }
 .sloganHeader {
     height: 100%;
     padding: 5px;
     float: left;
+    cursor: pointer;
 }
 .sloganImg {
     border-left: solid #b1b1b1 1px;
@@ -20,4 +22,11 @@
 }
 .titleHeader {
     color: white;;
+}
+.footerCol {
+    background-color: black;
+    text-align: center;
+}
+.footerDescription {
+    color: white !important;
 }
