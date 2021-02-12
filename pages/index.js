@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link';
 import React, { useState } from 'react';
 import PageLayout from '../components/layout';
-import { Col, Row, List, Typography, Avatar, Button, Form, Input } from 'antd';
+import { Col, Row, List, Typography, Avatar, Button, Form, Input, Alert } from 'antd';
 import styles from "./index.module.css";
 
 const { Title } = Typography;
@@ -35,7 +35,33 @@ const listPoints = [
 
 export default function Home(props) {
     const [form] = Form.useForm();
-    const [formSubscription, setFormSubscription] = useState('');
+    const [isSubscribing, setSubscribing] = useState(false);
+    const [isSubscribed, setSubscribed] = useState(false);
+    function onSubmit(values) {
+        // console.log(values)
+        // const res = await fetch('http://127.0.0.1:5000/api/dogs')
+        // const sourceData = await res.json()
+        setSubscribing(true);
+        const url = `http://127.0.0.1:5000/api/subscribers/${values.email}`;
+        // const data = values;
+        fetch(url, {
+            method: 'PUT', // or 'PUT'
+            // mode: 'no-cors',
+            body: JSON.stringify(values), // data can be `string` or {object}!
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error);
+            setSubscribing(false);
+        })
+        .then(response => {
+            console.log('Success:', response);
+            setSubscribing(false);
+            setSubscribed(true);
+        });
+    }
     // const onFormLayoutChange = ({ layout }: { layout: LayoutType }) => {
     //     setFormLayout(layout);
     // };
@@ -140,16 +166,33 @@ export default function Home(props) {
                             layout="vertical"
                             form={form}
                             size="large"
+                            onFinish={onSubmit}
                             // initialValues={{ layout: formSubscription }}
                             // onValuesChange={onFormLayoutChange}
                         >
-                            <Form.Item label="Email:" className={styles.emailLabel}>
-                                <Input placeholder="" />
+                            <Form.Item label="Email:" className={styles.emailLabel} name="email">
+                                <Input placeholder="" type="email" required/>
                             </Form.Item>
                             <Form.Item>
-                                <Button block type="primary">Suscribirse</Button>
+                                <Button 
+                                    block 
+                                    type="primary"
+                                    htmlType="submit"
+                                    loading={isSubscribing}
+                                >
+                                    Suscribirse
+                                </Button>
                             </Form.Item>
                         </Form>
+                        {isSubscribed &&
+                            <Alert
+                                message="Te has suscrito correctamente!"
+                                type="success"
+                                showIcon
+                                closable
+                                afterClose={() => setSubscribed(false)}
+                            />
+                        }
                     </Col>
                 </Row>
             </div>
