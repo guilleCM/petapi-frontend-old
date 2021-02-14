@@ -41,7 +41,7 @@ export default function PageLayout({ children }) {
                 </Link>
                 <Menu className={styles.headMenu} theme="dark" mode="horizontal">
                     <Menu.Item key="1">
-                        <Link href="/perros">
+                        <Link href="/perros" className={styles.hadMenuLi}>
                             Lista de perros
                         </Link>
                     </Menu.Item>

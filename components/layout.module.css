@@ -36,4 +36,8 @@
 }
 .headMenu > li {
     line-height: 80px;
+    background: #101010;
+}
+.headMenu > li:hover, li.ant-menu-item-active {
+    background: #101010 !important;
 }
