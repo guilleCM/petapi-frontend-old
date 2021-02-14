@@ -14,6 +14,11 @@
     float: left;
     cursor: pointer;
 }
+@media (max-width: 588px) {
+    .sloganHeader {
+        display: none;
+    }
+}
 .sloganImg {
     border-left: solid #b1b1b1 1px;
 }
@@ -39,5 +44,8 @@
     background: #101010;
 }
 .headMenu > li:hover, li.ant-menu-item-active {
+    background: #101010 !important;
+}
+.headMenu > li:hover, li.ant-menu-item-selected {
     background: #101010 !important;
 }
