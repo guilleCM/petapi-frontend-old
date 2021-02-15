@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageLayout from '../components/layout';
-import { Col, Row, List, Typography, Avatar, Button, Form, Input, Alert } from 'antd';
+import { Col, Row, List, Typography, Avatar, Button, Form, Input, Alert, Modal, Spin } from 'antd';
+import Fade from 'react-reveal/Fade';
 import styles from "./index.module.css";
 
 const { Title } = Typography;
@@ -33,10 +34,69 @@ const listPoints = [
     },
 ]
 
+function UnsubscribeModal(props) {
+    const [isLoading, setLoading] = useState(true);
+    const [success, setSuccess] = useState(false);
+    const [message, setMessage] = useState("Espere...");
+    useEffect(() => {
+        // code to run on component mount
+        const email = window.location.search.split("=")[1]
+        const url = `http://127.0.0.1:5000/api/subscribers/${email}?active=false`;
+        // const data = values;
+        fetch(url, {
+            method: 'PUT', // or 'PUT'
+            // mode: 'no-cors',
+            body: JSON.stringify({'active': false}), // data can be `string` or {object}!
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error);
+            setLoading(false);
+            setMessage("Se ha producido un error. Prueba más tarde.")
+        })
+        .then(response => {
+            console.log('Success:', response);
+            setSuccess(true);
+            setLoading(false);
+            setMessage("Has cancelado la suscripción correctamente.")
+        });
+    }, [])
+    return(
+        <Modal 
+            title="Dar de baja su suscripción" 
+            closable={false}
+            visible={true}
+            footer={null}
+        >
+            <Spin spinning={isLoading}>
+                <Alert
+                    message={message}
+                    description=""
+                    type={isLoading ? "info" : (success ? "success" : "error")}
+                    showIcon
+                />
+            </Spin>
+            <div className={styles.modalUnsubBtnDiv}>
+                <Button type="primary" onClick={() => props.setUnsub(false)}>Cerrar</Button>
+            </div>
+        </Modal>
+    )
+}
+
+
 export default function Home(props) {
     const [form] = Form.useForm();
     const [isSubscribing, setSubscribing] = useState(false);
     const [isSubscribed, setSubscribed] = useState(false);
+    const [isUnsub, setUnsub] = useState(false);
+    useEffect(() => {
+        // code to run on component mount
+        if (window.location.search && window.location.search.includes("unsubscribe=")) {
+            setUnsub(true);
+        }
+    }, [])
     function onSubmit(values) {
         // console.log(values)
         // const res = await fetch('http://127.0.0.1:5000/api/dogs')
@@ -101,36 +161,38 @@ export default function Home(props) {
                             size="large"
                             dataSource={listPoints}
                             renderItem={(item, index) => (
-                                <List.Item
-                                    className={styles.helpList}
-                                    key={item.title}
-                                >
-                                    {index%2 === 0 &&
-                                        <img
-                                            className={styles.listImg}
-                                            alt="logo"
-                                            src={item.img}
-                                        />
-                                    }
-                                    {index%2 === 1 &&
-                                        <img
-                                            className={styles.listImgMobileShow}
-                                            alt="logo"
-                                            src={item.img}
-                                        />
-                                    }
-                                    <div className={styles.helpListTextWrapper}>
-                                        <Title level={4}>{item.title}</Title>
-                                        <p>{item.content}</p>
-                                    </div>
-                                    {index%2 === 1 &&
-                                        <img
-                                            className={styles.listImgMobileHidden}
-                                            alt="logo"
-                                            src={item.img}
-                                        />
-                                    }
-                                </List.Item>
+                                <Fade right={index%2 === 0} left={index%2 === 1}>
+                                    <List.Item
+                                        className={styles.helpList}
+                                        key={item.title}
+                                    >
+                                        {index%2 === 0 &&
+                                            <img
+                                                className={styles.listImg}
+                                                alt="logo"
+                                                src={item.img}
+                                            />
+                                        }
+                                        {index%2 === 1 &&
+                                            <img
+                                                className={styles.listImgMobileShow}
+                                                alt="logo"
+                                                src={item.img}
+                                            />
+                                        }
+                                        <div className={styles.helpListTextWrapper}>
+                                            <Title level={4}>{item.title}</Title>
+                                            <p>{item.content}</p>
+                                        </div>
+                                        {index%2 === 1 &&
+                                            <img
+                                                className={styles.listImgMobileHidden}
+                                                alt="logo"
+                                                src={item.img}
+                                            />
+                                        }
+                                    </List.Item>
+                                </Fade>
                             )}
                         />
                     </Col>
@@ -138,16 +200,18 @@ export default function Home(props) {
                 <Row>
                     <Col xs={24} sm={24} md={24} lg={{ span: 18, offset: 3 }} className={styles.lastEntriesCol}>
                         <Title className={styles.explainPointsTitle}>Últimos perros</Title>
-                        <Avatar.Group className={styles.lastEntriesGroup}>
-                            {props.sourceData.map(dog =>
-                                <Avatar
-                                    className={styles.avatarEntrie}
-                                    size={{ xs: 150, sm: 150, md: 150, lg: 170, xl: 180, xxl: 200 }}
-                                    key={dog.id}
-                                    src={`http://127.0.0.1:5000/${dog.media[0]}`} 
-                                />
-                            )}
-                        </Avatar.Group>
+                        <Fade top>
+                            <Avatar.Group className={styles.lastEntriesGroup}>
+                                {props.sourceData.map(dog =>
+                                    <Avatar
+                                        className={styles.avatarEntrie}
+                                        size={{ xs: 150, sm: 150, md: 150, lg: 170, xl: 180, xxl: 200 }}
+                                        key={dog.id}
+                                        src={`http://127.0.0.1:5000/${dog.media[0]}`} 
+                                    />
+                                )}
+                            </Avatar.Group>
+                        </Fade>
                     </Col> 
                     <Col xs={{ span: 18, offset: 3 }} sm={{ span: 16, offset: 4 }} md={{ span: 12, offset: 6 }} lg={{ span: 6, offset: 9 }} className={styles.goToAllDogsCol}>
                         <Link href="/perros">
@@ -195,6 +259,12 @@ export default function Home(props) {
                         }
                     </Col>
                 </Row>
+                {isUnsub &&
+                    <UnsubscribeModal
+                        isUnsub={isUnsub}
+                        setUnsub={setUnsub}
+                    />
+                }
             </div>
         </PageLayout>
     )
@@ -203,7 +273,6 @@ export default function Home(props) {
 export async function getServerSideProps(context) {
     const res = await fetch('http://127.0.0.1:5000/api/dogs?limit=5')
     const sourceData = await res.json()
-
     if (!sourceData) {
       return {
         redirect: {

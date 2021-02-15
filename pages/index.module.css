@@ -231,3 +231,7 @@
     color: white !important;
     font-size: 30px;
 }
+.modalUnsubBtnDiv {
+    text-align: end;
+    padding-top: 25px;
+}
