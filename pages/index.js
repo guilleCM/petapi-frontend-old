@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import io from "socket.io-client";
 import PageLayout from '../components/layout';
 import { Col, Row, List, Typography, Avatar, Button, Form, Input, Alert, Modal, Spin } from 'antd';
 import Fade from 'react-reveal/Fade';
@@ -85,18 +86,42 @@ function UnsubscribeModal(props) {
     )
 }
 
+const endpoint = "http://localhost:5000";
+const socket = io.connect(`${endpoint}`);
 
 export default function Home(props) {
     const [form] = Form.useForm();
     const [isSubscribing, setSubscribing] = useState(false);
     const [isSubscribed, setSubscribed] = useState(false);
     const [isUnsub, setUnsub] = useState(false);
+    const [messages, setMessages] = useState(["Hello and welcome"]);
+    const [message, setMessage] = useState("");
     useEffect(() => {
         // code to run on component mount
         if (window.location.search && window.location.search.includes("unsubscribe=")) {
             setUnsub(true);
         }
     }, [])
+    useEffect(() => {
+        getMessages()
+    }, [messages.length])
+    const getMessages = () => {
+        socket.on("message", msg => {
+            setMessages([...messages, msg])
+        })
+    }
+    const onChange = e => {
+        setMessage(e.target.value);
+    }
+    const onClick = () => {
+        if (message !== "") {
+            socket.emit("message", message);
+            setMessage("");
+        }
+        else {
+            alert("Please Add a message")
+        }
+    }
     function onSubmit(values) {
         // console.log(values)
         // const res = await fetch('http://127.0.0.1:5000/api/dogs')
@@ -151,6 +176,15 @@ export default function Home(props) {
                             que te guste ya se te hayan adelantado en el proceso de reserva. 
                             `}
                         </p>
+                    </Col>
+                    <Col lg={{ span: 18, offset: 3 }} className={styles.explainAppCol}>
+                        {messages.length > 0 &&
+                            messages.map(msg => (
+                                <p>{msg}</p>
+                            ))
+                        }
+                        <input value={message} name="message" onChange={e => onChange(e)} />
+                        <button onClick={() => onClick()}>Enviar</button>
                     </Col>
                 </Row>
                 <Row className={styles.explainPointsRow}>
