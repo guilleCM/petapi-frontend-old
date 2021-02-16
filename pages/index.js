@@ -19,7 +19,7 @@ const listPoints = [
     },
     {
         title: 'Recibe notificaciones cuando entren nuevos perros',
-        content: 'Podrás ser el primero en enterarte de la entrada de nuevos peluditos en las perreras. Recibe una notificación via email o via push directamente en tu móvil. Sé el primero en reservarlo.',
+        content: 'Podrás ser el primero en enterarte de la entrada de nuevos peluditos en las perreras. Recibe una notificación por email directamente en tu móvil. Sé el primero en reservarlo.',
         img: '/undraw_newsletter.svg',
     },
     {
